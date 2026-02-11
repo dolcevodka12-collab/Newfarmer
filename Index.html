@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .farm-grid { display: grid; grid-template-columns: repeat(3, 100px); gap: 10px; background: #8B4513; padding: 15px; border-radius: 10px; width: fit-content; margin: 20px auto; }
+        .plot { width: 100px; height: 100px; background: #A0522D; border: 2px solid #5D2E17; display: flex; align-items: center; justify-content: center; font-size: 40px; cursor: pointer; position: relative; }
+        .plot.ready { background: #228B22; }
+        .status-bar { text-align: center; font-family: 'Courier New', monospace; color: #2e7d32; font-weight: bold; }
+        .btn-shop { display: block; margin: 10px auto; padding: 10px; background: #FFD700; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="status-bar">
+    DINERO: $<span id="money">20</span> | SEMILLAS: <span id="seeds">2</span><br>
+    <small>Haz clic en la tierra para Arar -> Sembrar -> Cosechar</small>
+</div>
+
+<div class="farm-grid" id="farm">
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+    <div class="plot" onclick="action(this)">🟫</div>
+</div>
+
+<button class="btn-shop" onclick="buySeed()">COMPRAR SEMILLA ($5)</button>
+
+<script>
+    let money = 20;
+    let seeds = 2;
+
+    function action(el) {
+        // Estado 1: Tierra seca -> Arada
+        if (el.innerHTML === "🟫") {
+            el.innerHTML = "🧹"; // Icono de arar
+            setTimeout(() => el.innerHTML = "🌱", 500);
+            el.dataset.state = "plowed";
+        } 
+        // Estado 2: Arada -> Sembrada
+        else if (el.dataset.state === "plowed" && seeds > 0) {
+            seeds--;
+            document.getElementById('seeds').innerText = seeds;
+            el.innerHTML = "🪴";
+            el.dataset.state = "growing";
+            // Tiempo de crecimiento (3 segundos)
+            setTimeout(() => {
+                el.innerHTML = "🌽";
+                el.classList.add('ready');
+                el.dataset.state = "ready";
+            }, 3000);
+        }
+        // Estado 3: Cosechar
+        else if (el.dataset.state === "ready") {
+            money += 12; // Ganancia
+            document.getElementById('money').innerText = money;
+            el.innerHTML = "🟫";
+            el.classList.remove('ready');
+            el.dataset.state = "";
+        }
+    }
+
+    function buySeed() {
+        if (money >= 5) {
+            money -= 5;
+            seeds++;
+            document.getElementById('money').innerText = money;
+            document.getElementById('seeds').innerText = seeds;
+        } else {
+            alert("¡No tienes dinero!");
+        }
+    }
+</script>
+</body>
+</html>
+
