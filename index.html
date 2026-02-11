@@ -1,112 +1,224 @@
+    </script>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funny Farmer Retro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Funny Farmer Retro Sendo</title>
     <style>
-        * { box-sizing: border-box; touch-action: manipulation; }
-        body { background: #f0e68c; font-family: 'Courier New', monospace; text-align: center; padding: 20px; margin: 0; }
+        :root { --brown: #5d4037; --dirt: #8d6e63; --gold: #ffd700; }
         
-        .status-bar { 
-            background: #fff; padding: 15px; border-radius: 10px; 
-            border: 4px solid #8B4513; margin-bottom: 20px; font-weight: bold; 
+        body { 
+            background-image: url('[attachment_0](attachment)'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', Courier, monospace; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .header { 
+            background: rgba(51, 51, 51, 0.9); 
+            color: white; 
+            width: 100%; 
+            padding: 15px; 
+            text-align: center; 
+            border-bottom: 4px solid var(--gold); 
         }
 
-        .farm-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; background: #8B4513; padding: 15px; 
-            border-radius: 15px; max-width: 320px; margin: 0 auto; 
-            box-shadow: 0 10px 0 #5D2E17;
+        .stats { display: flex; justify-content: space-around; font-size: 16px; margin-top: 5px; }
+
+        .farm-container { 
+            background: rgba(255, 255, 255, 0.2); 
+            padding: 20px; 
+            border-radius: 20px; 
+            backdrop-filter: blur(5px);
+            margin-top: 20px;
         }
 
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 95px); 
+            gap: 10px; 
+            background: var(--brown); 
+            padding: 15px; 
+            border-radius: 10px; 
+            box-shadow: 0 8px 0 #3e2723; 
+        }
+        
         .plot { 
-            aspect-ratio: 1/1; background: #A0522D; border: 2px solid #5D2E17; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 40px; border-radius: 8px; cursor: pointer;
+            width: 95px; height: 95px; 
+            background: var(--dirt); 
+            border: 2px solid #5d4037; 
+            border-radius: 5px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 35px; 
+            position: relative; 
+            cursor: pointer;
+            transition: transform 0.1s;
         }
 
-        .plot.ready { background: #228B22; border: 3px solid #ffd700; }
+        .plot:active { transform: scale(0.95); }
 
-        .btn-shop { 
-            margin-top: 25px; padding: 15px 30px; background: #FFD700; 
-            border: none; border-radius: 50px; font-weight: bold; 
-            box-shadow: 0 5px 0 #b8860b; cursor: pointer; font-size: 16px;
+        .plot.thirsty::after { 
+            content: '💧'; 
+            position: absolute; top: 5px; right: 5px; 
+            font-size: 18px; animation: blink 0.8s infinite; 
         }
-        .btn-shop:active { transform: translateY(3px); box-shadow: 0 2px 0 #b8860b; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .plot.ready { background: #81c784; border: 3px solid var(--gold); }
+        
+        .controls { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 320px; }
+        
+        button { 
+            padding: 15px; border: none; border-radius: 10px; 
+            font-weight: bold; cursor: pointer; font-family: inherit;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+        }
+        
+        .btn-seed { background: #4fc3f7; color: white; }
+        .btn-energy { background: #ff8a65; color: white; }
+        
+        #msg { 
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 15px;
+            color: #333; 
+            font-weight: bold; 
+            font-size: 14px; 
+        }
     </style>
 </head>
 <body>
 
-    <div class="status-bar">
-        💰 DINERO: $<span id="money">20</span><br>
-        🌱 SEMILLAS: <span id="seeds">2</span>
+<div class="header">
+    <div>FUNNY FARMER: SENDO EDITION</div>
+    <div class="stats">
+        <span>💰$<span id="money">20</span></span>
+        <span>🌱x<span id="seeds">5</span></span>
+        <span>⚡<span id="energy">100</span>%</span>
     </div>
+</div>
 
-    <div class="farm-grid">
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
-        <div class="plot" onclick="action(this)">🟫</div>
+<div id="msg">Toca la tierra para empezar</div>
+
+<div class="farm-container">
+    <div class="grid">
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
+        <div class="plot" onclick="handlePlot(this)">🟫</div>
     </div>
+</div>
 
-    <button class="btn-shop" onclick="buySeed()">COMPRAR SEMILLA ($5)</button>
+<div class="controls">
+    <button class="btn-seed" onclick="buy('seed')">SEMILLAS ($5)</button>
+    <button class="btn-energy" onclick="buy('energy')">DESCANSAR ($10)</button>
+</div>
 
-    <script>
-        let money = 20;
-        let seeds = 2;
+<script>
+    let money = 20;
+    let seeds = 5;
+    let energy = 100;
 
-        function action(el) {
-            // ESTADO 1: ARAR (De tierra seca a tierra arada)
-            if (el.innerHTML === "🟫") {
-                el.innerHTML = "🧹";
-                setTimeout(() => { 
-                    el.innerHTML = "☁️"; // Tierra lista para sembrar
-                    el.dataset.state = "plowed"; 
-                }, 400);
-            } 
-            // ESTADO 2: SEMBRAR (Requiere tener semillas)
-            else if (el.dataset.state === "plowed" && seeds > 0) {
+    function updateUI() {
+        document.getElementById('money').innerText = money;
+        document.getElementById('seeds').innerText = seeds;
+        document.getElementById('energy').innerText = energy;
+    }
+
+    function showMsg(txt) { document.getElementById('msg').innerText = txt; }
+
+    function handlePlot(el) {
+        if (energy <= 5) { showMsg("¡Cansado! Necesitas descansar."); return; }
+        const state = el.dataset.state || "empty";
+
+        if (state === "empty") {
+            consumeEnergy(10);
+            el.innerHTML = "🧹";
+            setTimeout(() => {
+                el.innerHTML = "🚜"; 
+                el.dataset.state = "plowed";
+                showMsg("Tierra lista. ¡Siembra!");
+            }, 400);
+        }
+        else if (state === "plowed") {
+            if (seeds > 0) {
                 seeds--;
-                updateUI();
+                consumeEnergy(5);
                 el.innerHTML = "🌱";
                 el.dataset.state = "growing";
-                // Crecer tarda 3 segundos
-                setTimeout(() => {
+                startGrowth(el);
+            } else { showMsg("Sin semillas."); }
+        }
+        else if (state === "growing" && el.classList.contains('thirsty')) {
+            consumeEnergy(8);
+            el.classList.remove('thirsty');
+            showMsg("¡Regado!");
+        }
+        else if (state === "ready") {
+            money += 15;
+            consumeEnergy(5);
+            el.innerHTML = "🟫";
+            el.dataset.state = "empty";
+            el.classList.remove('ready');
+            showMsg("+$15 Ganados");
+        }
+        updateUI();
+    }
+
+    function startGrowth(el) {
+        setTimeout(() => {
+            if (el.dataset.state !== "growing") return;
+            el.innerHTML = "🌿";
+            if (Math.random() > 0.4) el.classList.add('thirsty');
+            
+            setTimeout(() => {
+                if (el.dataset.state !== "growing") return;
+                if (el.classList.contains('thirsty')) {
+                    el.innerHTML = "🥀";
+                    el.dataset.state = "empty";
+                    el.classList.remove('thirsty');
+                    showMsg("Se secó por falta de agua.");
+                } else {
                     el.innerHTML = "🌽";
-                    el.classList.add('ready');
                     el.dataset.state = "ready";
-                }, 3000);
-            }
-            // ESTADO 3: COSECHAR (Vender)
-            else if (el.dataset.state === "ready") {
-                money += 12;
+                    el.classList.add('ready');
+                    showMsg("¡Cosecha lista!");
+                }
                 updateUI();
-                el.innerHTML = "🟫";
-                el.classList.remove('ready');
-                el.dataset.state = "";
-            }
-        }
+            }, 4000);
+        }, 3000);
+    }
 
-        function buySeed() {
-            if (money >= 5) {
-                money -= 5;
-                seeds++;
-                updateUI();
-            } else {
-                alert("¡Necesitas más dinero!");
-            }
+    function buy(item) {
+        if (item === 'seed' && money >= 5) {
+            money -= 5; seeds++;
+        } else if (item === 'energy' && money >= 10) {
+            money -= 10; energy = Math.min(energy + 50, 100);
+        } else {
+            showMsg("Dinero insuficiente.");
         }
+        updateUI();
+    }
 
-        function updateUI() {
-            document.getElementById('money').innerText = money;
-            document.getElementById('seeds').innerText = seeds;
-        }
-    </script>
+    function consumeEnergy(amount) { energy = Math.max(0, energy - amount); }
+</script>
 </body>
 </html>
