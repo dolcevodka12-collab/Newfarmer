@@ -6,48 +6,44 @@
     <title>Funny Farmer Retro</title>
     <style>
         * { box-sizing: border-box; touch-action: manipulation; }
-        body { background: #f0e68c; font-family: sans-serif; text-align: center; padding: 20px; }
+        body { background: #f0e68c; font-family: 'Courier New', monospace; text-align: center; padding: 20px; margin: 0; }
         
         .status-bar { 
-            background: #fff; padding: 10px; border-radius: 8px; 
-            border: 3px solid #8B4513; margin-bottom: 20px; font-weight: bold; 
+            background: #fff; padding: 15px; border-radius: 10px; 
+            border: 4px solid #8B4513; margin-bottom: 20px; font-weight: bold; 
         }
 
         .farm-grid { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; background: #8B4513; padding: 15px; 
-            border-radius: 12px; max-width: 350px; margin: 0 auto; 
+            gap: 12px; background: #8B4513; padding: 15px; 
+            border-radius: 15px; max-width: 320px; margin: 0 auto; 
+            box-shadow: 0 10px 0 #5D2E17;
         }
 
         .plot { 
             aspect-ratio: 1/1; background: #A0522D; border: 2px solid #5D2E17; 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 40px; border-radius: 4px; cursor: pointer;
+            font-size: 40px; border-radius: 8px; cursor: pointer;
         }
 
-        .plot.ready { background: #228B22; border-color: #ffd700; animation: pulse 1s infinite; }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
+        .plot.ready { background: #228B22; border: 3px solid #ffd700; }
 
         .btn-shop { 
-            margin-top: 20px; padding: 15px 30px; background: #FFD700; 
+            margin-top: 25px; padding: 15px 30px; background: #FFD700; 
             border: none; border-radius: 50px; font-weight: bold; 
-            box-shadow: 0 4px #b8860b; cursor: pointer;
+            box-shadow: 0 5px 0 #b8860b; cursor: pointer; font-size: 16px;
         }
-        .btn-shop:active { transform: translateY(2px); box-shadow: 0 2px #b8860b; }
+        .btn-shop:active { transform: translateY(3px); box-shadow: 0 2px 0 #b8860b; }
     </style>
 </head>
 <body>
 
     <div class="status-bar">
-        💰 DINERO: $<span id="money">20</span> | 🌱 SEMILLAS: <span id="seeds">2</span>
+        💰 DINERO: $<span id="money">20</span><br>
+        🌱 SEMILLAS: <span id="seeds">2</span>
     </div>
 
-    <div class="farm-grid" id="farm">
+    <div class="farm-grid">
         <div class="plot" onclick="action(this)">🟫</div>
         <div class="plot" onclick="action(this)">🟫</div>
         <div class="plot" onclick="action(this)">🟫</div>
@@ -66,34 +62,30 @@
         let seeds = 2;
 
         function action(el) {
-            // 1. ARAR: De tierra seca a tierra lista
+            // ESTADO 1: ARAR (De tierra seca a tierra arada)
             if (el.innerHTML === "🟫") {
                 el.innerHTML = "🧹";
                 setTimeout(() => { 
-                    el.innerHTML = "☁️"; // Tierra preparada
+                    el.innerHTML = "☁️"; // Tierra lista para sembrar
                     el.dataset.state = "plowed"; 
                 }, 400);
             } 
-            // 2. SEMBRAR: Requiere tener semillas
-            else if (el.dataset.state === "plowed") {
-                if (seeds > 0) {
-                    seeds--;
-                    updateUI();
-                    el.innerHTML = "🌱";
-                    el.dataset.state = "growing";
-                    // Tarda 4 segundos en crecer
-                    setTimeout(() => {
-                        el.innerHTML = "🌽";
-                        el.classList.add('ready');
-                        el.dataset.state = "ready";
-                    }, 4000);
-                } else {
-                    alert("¡Compra más semillas!");
-                }
+            // ESTADO 2: SEMBRAR (Requiere tener semillas)
+            else if (el.dataset.state === "plowed" && seeds > 0) {
+                seeds--;
+                updateUI();
+                el.innerHTML = "🌱";
+                el.dataset.state = "growing";
+                // Crecer tarda 3 segundos
+                setTimeout(() => {
+                    el.innerHTML = "🌽";
+                    el.classList.add('ready');
+                    el.dataset.state = "ready";
+                }, 3000);
             }
-            // 3. COSECHAR: Vendes el producto
+            // ESTADO 3: COSECHAR (Vender)
             else if (el.dataset.state === "ready") {
-                money += 15;
+                money += 12;
                 updateUI();
                 el.innerHTML = "🟫";
                 el.classList.remove('ready');
@@ -107,7 +99,7 @@
                 seeds++;
                 updateUI();
             } else {
-                alert("Dinero insuficiente");
+                alert("¡Necesitas más dinero!");
             }
         }
 
